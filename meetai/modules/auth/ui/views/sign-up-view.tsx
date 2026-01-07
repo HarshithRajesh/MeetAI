@@ -21,41 +21,51 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { da } from "date-fns/locale";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1, { message: "Password is required" }),
-});
+const formSchema = z
+  .object({
+    name: z.string().min(1, { message: "Name is required" }),
+    email: z.string().email(),
+    password: z.string().min(1, { message: "Password is required" }),
+    confirmPassword: z.string().min(1, { message: "Password is required" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
-const SignInView = () => {
+const SignUpView = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-const [pending,setPending]=useState(false);
+  const [pending, setPending] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setError(null);
     setPending(true);
-    authClient.signIn.email(
+    authClient.signUp.email(
       {
+        name: data.name,
         email: data.email,
         password: data.password,
       },
       {
         onSuccess: () => {
-            setPending(false);
-            router.push("/");
+          setPending(false);
+          router.push("/");
         },
         onError: (error) => {
           setError(error.error.message);
         },
-        
       }
     );
   };
@@ -68,10 +78,32 @@ const [pending,setPending]=useState(false);
             <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold"> Welcome Back</h1>
+                  <h1 className="text-2xl font-bold">
+                    {" "}
+                    Let&apos;s Get Started
+                  </h1>
                   <p className="text-muted-foreground text-balance">
                     Login to your account
                   </p>
+                </div>
+                <div className="grid gap-3">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Your name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
                 <div className="grid gap-3">
                   <FormField
@@ -111,6 +143,25 @@ const [pending,setPending]=useState(false);
                     )}
                   />
                 </div>
+                <div className="grid gap-3">
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="********"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 {!!error && (
                   <Alert className="bg-destructive/10 border-none">
                     <OctagonAlertIcon className="h-4 w-4 !text-destructive" />
@@ -132,17 +183,22 @@ const [pending,setPending]=useState(false);
                   <Button variant="outline" type="button" className="w-full">
                     Google
                   </Button>
-                  <Button disabled={pending} variant="outline" type="button" className="w-full">
+                  <Button
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                  >
                     Github
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
+                  Already have an account?{" "}
                   <Link
-                    href="/sign-up"
+                    href="/sign-in"
                     className="underline underline-offset-4"
                   >
-                    Sign Up
+                    Sign In
                   </Link>
                 </div>
               </div>
@@ -168,4 +224,4 @@ const [pending,setPending]=useState(false);
   );
 };
 
-export default SignInView;
+export default SignUpView;
