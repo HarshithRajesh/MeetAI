@@ -31,4 +31,9 @@
   - Login Form
   - Get app logo
 
-## NExt
+## Authentication Socials
+
+- Configure Social providers
+  - Google
+  - Github
+- Protect non auth Pages
