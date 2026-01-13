@@ -4,4 +4,6 @@ const Page = () => {
   return <HomeView />;
 }
 
-export default Page;
+// export default Page;
+
+//Improvements
