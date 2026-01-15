@@ -5,5 +5,3 @@ const Page = () => {
 }
 
 // export default Page;
-
-//Improvements
