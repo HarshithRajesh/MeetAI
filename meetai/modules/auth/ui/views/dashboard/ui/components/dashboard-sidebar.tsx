@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
-
+import { Separator } from "@/components/ui/separator";
 
 const firstSection = [
   {
@@ -42,8 +42,32 @@ export const DashboardSidebar = () => {
       <SidebarHeader className="text-sidebar-acent-foreground">
         <Link href="/" className="flex items-center gap-2  px-2 pt-2">
           <Image src="/logo.svg" height={36} width={36} alt="Meet.AI" />
+          <p className="text-2xl font-semibold">Meet.AI</p>
         </Link>
       </SidebarHeader>
+      <div className="px-4 py-2">
+        <Separator className="opacity-10 text-[#5D6B68]" />
+      </div>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {firstSection.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton>
+                    <Link href={item.href}>
+                      <item.icon className="mr-2 h-4 w-4" />
+                      <span className="text-sm font-medium tracking-tight">
+                        {item.label}
+                      </span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
     </Sidebar>
   );
 };
