@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { usePathname } from "next/navigation";
 
 const firstSection = [
   {
@@ -37,6 +39,8 @@ const secondSection = [
 ];
 
 export const DashboardSidebar = () => {
+  const pathname = usePathname();
+
   return (
     <Sidebar>
       <SidebarHeader className="text-sidebar-acent-foreground">
@@ -54,10 +58,15 @@ export const DashboardSidebar = () => {
             <SidebarMenu>
               {firstSection.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton>
+                  <SidebarMenuButton asChild className={cn(
+                    "h-10 hover:bg-linear-to-r/oklch border border-transparent hover:border-[#5D6B68]/10 from-sidebar-accent from-5% via-40% via-sidebar/50 to-sidebar/50",
+                    pathname === item.href && "bg-linear-to-r/oklch border-[#5D6B68]/10 from-sidebar-accent from-5% via-40% via-sidebar/50 to-sidebar/50"
+                  )}
+                    isActive={pathname === item.href}
+                  >
                     <Link href={item.href}>
-                      <item.icon className="mr-2 h-4 w-4" />
-                      <span className="text-sm font-medium tracking-tight">
+                      <item.icon className="mr-2 h-4 w-4 tex" />
+                      <span className="text-sm font-medium tracking-tight text-white">
                         {item.label}
                       </span>
                     </Link>
