@@ -37,3 +37,12 @@
   - Google
   - Github
 - Protect non auth Pages
+
+## Dashboard Sidebar
+
+- Create Dashboard Layout
+- Create Dashboard module
+- Create Dashboard sidebar
+- modify 'global.css' theme
+- Fix gradient colors in auth views
+
